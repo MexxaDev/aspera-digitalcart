@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aspera Bar — Carta de Bebidas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Lato:wght@300;400;700&family=Special+Elite&display=swap" rel="stylesheet">
+    <style>
+        /* ═══════════════════════════════════════════
+           RESET & BASE
+        ═══════════════════════════════════════════ */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --wood-dark: #1a0f08;
+            --wood-medium: #2C1810;
+            --wood-light: #3d2317;
+            --wood-accent: #4a2c1a;
+            --cream: #FFF8F0;
+            --cream-dark: #F5E6D3;
+            --gold: #C8952E;
+            --gold-light: #d4a84a;
+            --gold-dark: #a07520;
+            --amber: #D4890E;
+            --text-light: #F5E6D3;
+            --text-muted: #b8a08a;
+            --badge-low: #6b8e3a;
+            --badge-med: #c8882e;
+            --badge-high: #b83a2a;
+            --rubia: #e8c44a;
+            --roja: #c0542e;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 70px;
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: var(--wood-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Textura de fondo madera */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(0,0,0,0.03) 2px,
+                    rgba(0,0,0,0.03) 4px
+                ),
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 80px,
+                    rgba(139,90,43,0.04) 80px,
+                    rgba(139,90,43,0.04) 81px
+                ),
+                linear-gradient(180deg,
+                    var(--wood-dark) 0%,
+                    #221409 30%,
+                    var(--wood-medium) 60%,
+                    #1a0f08 100%
+                );
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* ═══════════════════════════════════════════
+           HEADER / HERO
+        ═══════════════════════════════════════════ */
+        .hero {
+            text-align: center;
+            padding: 60px 20px 40px;
+            position: relative;
+            background:
+                radial-gradient(ellipse at center, rgba(200,149,46,0.12) 0%, transparent 70%),
+                linear-gradient(180deg, var(--wood-dark), var(--wood-medium));
+            border-bottom: 3px solid var(--gold);
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold-light), transparent);
+        }
+
+        .logo-container {
+            display: inline-block;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .logo-img {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
+            border-radius: 50%;
+            border: 3px solid var(--gold);
+            background: var(--wood-dark);
+            padding: 8px;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 900;
+            color: var(--cream);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+            margin-bottom: 4px;
+        }
+
+        .hero .subtitle {
+            font-family: 'Special Elite', cursive;
+            font-size: clamp(0.85rem, 2vw, 1.1rem);
+            color: var(--gold);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin: 12px 0;
+        }
+
+        .divider-line {
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+
+        .divider-diamond {
+            width: 8px;
+            height: 8px;
+            background: var(--gold);
+            transform: rotate(45deg);
+        }
+
+        /* ═══════════════════════════════════════════
+           NAVIGACIÓN
+        ═══════════════════════════════════════════ */
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: linear-gradient(180deg, var(--wood-dark), rgba(26,15,8,0.97));
+            border-bottom: 2px solid var(--gold-dark);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .nav-inner {
+            display: flex;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            padding: 0 8px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .nav-inner::-webkit-scrollbar { display: none; }
+
+        .nav a {
+            flex-shrink: 0;
+            text-decoration: none;
+            color: var(--text-muted);
+            font-family: 'Special Elite', cursive;
+            font-size: 0.82rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 14px 18px;
+            white-space: nowrap;
+            transition: color 0.2s, border-color 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+
+        .nav a:hover,
+        .nav a.active {
+            color: var(--gold);
+            border-bottom-color: var(--gold);
+        }
+
+        /* ═══════════════════════════════════════════
+           CONTENIDO GENERAL
+        ═══════════════════════════════════════════ */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+
+        .section {
+            padding: 48px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 36px;
+        }
+
+        .section-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.6rem, 4vw, 2.2rem);
+            font-weight: 700;
+            color: var(--cream);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .section-header .section-sub {
+            font-family: 'Special Elite', cursive;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 6px;
+            letter-spacing: 0.1em;
+        }
+
+        .section-divider {
+            width: 80px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            margin: 14px auto 0;
+        }
+
+        /* ═══════════════════════════════════════════
+           TARJETAS DE CERVEZA
+        ═══════════════════════════════════════════ */
+        .beers-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        @media (min-width: 600px) {
+            .beers-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        .beer-card {
+            background:
+                linear-gradient(135deg, rgba(60,35,20,0.9), rgba(44,24,16,0.95));
+            border: 1px solid rgba(200,149,46,0.2);
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s, border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .beer-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(200,149,46,0.5);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+        }
+
+        .beer-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-dark));
+        }
+
+        .beer-card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .beer-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--cream);
+            line-height: 1.3;
+            flex: 1;
+        }
+
+        .beer-brewery {
+            font-size: 0.78rem;
+            color: var(--gold);
+            font-style: italic;
+            margin-top: 2px;
+        }
+
+        .promo-badge {
+            background: linear-gradient(135deg, var(--badge-high), #d4442a);
+            color: #fff;
+            font-family: 'Special Elite', cursive;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 20px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(184,58,42,0.4);
+            animation: pulse-badge 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-badge {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        .beer-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.72rem;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .tag-color-rubia {
+            background: rgba(232,196,74,0.15);
+            color: var(--rubia);
+            border: 1px solid rgba(232,196,74,0.3);
+        }
+
+        .tag-color-roja {
+            background: rgba(192,84,46,0.15);
+            color: var(--roja);
+            border: 1px solid rgba(192,84,46,0.3);
+        }
+
+        .tag-abv {
+            background: rgba(200,149,46,0.12);
+            color: var(--gold-light);
+            border: 1px solid rgba(200,149,46,0.25);
+        }
+
+        .tag-ibu {
+            background: rgba(180,160,140,0.1);
+            color: var(--text-muted);
+            border: 1px solid rgba(180,160,140,0.2);
+        }
+
+        .tag-bitterness {
+            border: 1px solid;
+        }
+
+        .tag-bitterness.bajo {
+            background: rgba(107,142,58,0.15);
+            color: var(--badge-low);
+            border-color: rgba(107,142,58,0.3);
+        }
+
+        .tag-bitterness.medio {
+            background: rgba(200,136,46,0.15);
+            color: var(--badge-med);
+            border-color: rgba(200,136,46,0.3);
+        }
+
+        .tag-bitterness.alto {
+            background: rgba(184,58,42,0.15);
+            color: var(--badge-high);
+            border-color: rgba(184,58,42,0.3);
+        }
+
+        /* Barra de amargor visual */
+        .bitterness-bar {
+            height: 4px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 2px;
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+
+        .bitterness-fill {
+            height: 100%;
+            border-radius: 2px;
+            transition: width 0.6s ease;
+        }
+
+        .bitterness-fill.bajo { width: 25%; background: var(--badge-low); }
+        .bitterness-fill.medio { width: 55%; background: var(--badge-med); }
+        .bitterness-fill.alto { width: 90%; background: var(--badge-high); }
+
+        .beer-prices {
+            display: flex;
+            gap: 12px;
+            margin-top: 4px;
+        }
+
+        .price {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .price-label {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 2px;
+        }
+
+        .price-value {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        .price-value.promo {
+            color: #e85d4a;
+        }
+
+        .price-separator {
+            width: 1px;
+            background: rgba(200,149,46,0.2);
+            align-self: stretch;
+        }
+
+        .no-pint {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            font-style: italic;
+            align-self: center;
+        }
+
+        /* ═══════════════════════════════════════════
+           TRAGOS / OTROS
+        ═══════════════════════════════════════════ */
+        .drinks-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .drink-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            background: linear-gradient(135deg, rgba(60,35,20,0.85), rgba(44,24,16,0.9));
+            border: 1px solid rgba(200,149,46,0.15);
+            border-radius: 10px;
+            transition: border-color 0.3s;
+        }
+
+        .drink-item:hover {
+            border-color: rgba(200,149,46,0.4);
+        }
+
+        .drink-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--cream);
+        }
+
+        .drink-desc {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .drink-price {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--gold);
+            white-space: nowrap;
+        }
+
+        /* ═══════════════════════════════════════════
+           RECARGAS
+        ═══════════════════════════════════════════ */
+        .refill-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+        }
+
+        .refill-card {
+            text-align: center;
+            padding: 28px 20px;
+            background: linear-gradient(135deg, rgba(60,35,20,0.85), rgba(44,24,16,0.9));
+            border: 1px solid rgba(200,149,46,0.15);
+            border-radius: 12px;
+            transition: border-color 0.3s;
+        }
+
+        .refill-card:hover { border-color: rgba(200,149,46,0.4); }
+
+        .refill-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .refill-type {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--cream);
+            margin-bottom: 4px;
+        }
+
+        .refill-desc {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .refill-price {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        /* ═══════════════════════════════════════════
+           PLACEHOLDERS
+        ═══════════════════════════════════════════ */
+        .placeholder {
+            text-align: center;
+            padding: 60px 20px;
+            border: 2px dashed rgba(200,149,46,0.2);
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(60,35,20,0.4), rgba(44,24,16,0.5));
+        }
+
+        .placeholder-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .placeholder h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            color: var(--cream);
+            margin-bottom: 8px;
+        }
+
+        .placeholder p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+
+        /* ═══════════════════════════════════════════
+           FOOTER
+        ═══════════════════════════════════════════ */
+        .footer {
+            text-align: center;
+            padding: 48px 20px;
+            border-top: 2px solid rgba(200,149,46,0.2);
+            margin-top: 20px;
+        }
+
+        .footer-message {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1rem;
+            color: var(--cream);
+            max-width: 500px;
+            margin: 0 auto 24px;
+            line-height: 1.7;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .footer-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 22px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-family: 'Lato', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            transition: transform 0.2s, box-shadow 0.3s;
+        }
+
+        .footer-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+        }
+
+        .btn-whatsapp {
+            background: #25d366;
+            color: #fff;
+        }
+
+        .btn-food {
+            background: var(--gold);
+            color: var(--wood-dark);
+        }
+
+        .footer-alias {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 16px;
+        }
+
+        .footer-alias strong {
+            color: var(--gold);
+            font-family: 'Special Elite', cursive;
+        }
+
+        .footer-copy {
+            font-size: 0.7rem;
+            color: rgba(184,160,138,0.5);
+            margin-top: 20px;
+        }
+
+        /* ═══════════════════════════════════════════
+           PRINT
+        ═══════════════════════════════════════════ */
+        @media print {
+            body { background: #fff; color: #222; }
+            body::before { display: none; }
+            .nav { position: static; border-bottom: 1px solid #ccc; }
+            .nav a { color: #333; padding: 8px 12px; }
+            .hero { background: #fff; border-bottom: 2px solid #222; padding: 30px 20px; }
+            .hero h1 { color: #222; text-shadow: none; }
+            .hero .subtitle { color: #666; }
+            .section-header h2 { color: #222; }
+            .beer-card { background: #f9f6f1; border: 1px solid #ddd; break-inside: avoid; }
+            .beer-card::before { background: #222; }
+            .beer-name { color: #222; }
+            .price-value { color: #222; }
+            .price-value.promo { color: #c00; }
+            .drink-item { background: #f9f6f1; border: 1px solid #ddd; }
+            .drink-name { color: #222; }
+            .drink-price { color: #222; }
+            .refill-card { background: #f9f6f1; border: 1px solid #ddd; }
+            .refill-type { color: #222; }
+            .refill-price { color: #222; }
+            .placeholder { border-color: #ccc; background: #fafafa; }
+            .placeholder h3 { color: #222; }
+            .footer { border-top-color: #ccc; }
+            .footer-message { color: #222; }
+            .btn-whatsapp, .btn-food { color: #222; border: 1px solid #222; background: transparent; }
+        }
+
+        /* ═══════════════════════════════════════════
+           ANIMACIONES DE ENTRADA
+        ═══════════════════════════════════════════ */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ════════════ HERO ════════════ -->
+    <header class="hero">
+        <div class="logo-container">
+            <img src="Aspera bar_ cervezas_files/unnamed.png" alt="Aspera Bar" class="logo-img">
+        </div>
+        <h1>Aspera Bar</h1>
+        <div class="divider">
+            <span class="divider-line"></span>
+            <span class="divider-diamond"></span>
+            <span class="divider-line"></span>
+        </div>
+        <p class="subtitle">Carta de Bebidas</p>
+    </header>
+
+    <!-- ════════════ NAVEGACIÓN ════════════ -->
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="#cervezas">Cervezas</a>
+            <a href="#tragos">Tragos</a>
+            <a href="#recargas">Recargas</a>
+            <a href="#vinos">Vinos</a>
+            <a href="#cocteles">Cocteles</a>
+            <a href="#comida">Comida</a>
+        </div>
+    </nav>
+
+    <main class="container">
+
+        <!-- ════════════ CERVEZAS DE CAÑO ════════════ -->
+        <section id="cervezas" class="section fade-in">
+            <div class="section-header">
+                <h2>En Canillas Hoy</h2>
+                <p class="section-sub">Variedad cervecera artesanal</p>
+                <div class="section-divider"></div>
+            </div>
+
+            <div class="beers-grid">
+
+                <!-- Liso -->
+                <div class="beer-card">
+                    <div class="beer-card-top">
+                        <div>
+                            <div class="beer-name">Liso</div>
+                            <div class="beer-brewery">Lager clásica</div>
+                        </div>
+                        <span class="promo-badge">PROMO</span>
+                    </div>
+                    <div class="beer-meta">
+                        <span class="tag tag-color-rubia">Rubia</span>
+                        <span class="tag tag-abv">4% alc</span>
+                        <span class="tag tag-ibu">12 IBU</span>
+                        <span class="tag tag-bitterness bajo">Amargor bajo</span>
+                    </div>
+                    <div class="bitterness-bar"><div class="bitterness-fill bajo"></div></div>
+                    <div class="beer-prices">
+                        <div class="price">
+                            <span class="price-label">Pinta</span>
+                            <span class="price-value promo">$2.800</span>
+                        </div>
+                        <div class="price-separator"></div>
+                        <div class="price">
+                            <span class="price-label">½ Pinta</span>
+                            <span class="price-value promo">$1.300</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dorada Pampeana -->
+                <div class="beer-card">
+                    <div class="beer-card-top">
+                        <div>
+                            <div class="beer-name">Dorada Pampeana</div>
+                            <div class="beer-brewery">Cerveza Aspera</div>
+                        </div>
+                    </div>
+                    <div class="beer-meta">
+                        <span class="tag tag-color-rubia">Rubia</span>
+                        <span class="tag tag-abv">4% alc</span>
+                        <span class="tag tag-ibu">18 IBU</span>
+                        <span class="tag tag-bitterness bajo">Amargor bajo</span>
+                    </div>
+                    <div class="bitterness-bar"><div class="bitterness-fill bajo"></div></div>
+                    <div class="beer-prices">
+                        <div class="price">
+                            <span class="price-label">Pinta</span>
+                            <span class="price-value">$2.800</span>
+                        </div>
+                        <div class="price-separator"></div>
+                        <div class="price">
+                            <span class="price-label">½ Pinta</span>
+                            <span class="price-value">$1.500</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lager Agosto -->
+                <div class="beer-card">
+                    <div class="beer-card-top">
+                        <div>
+                            <div class="beer-name">Lager</div>
+                            <div class="beer-brewery">Cerveza Agosto</div>
+                        </div>
+                        <span class="promo-badge">PROMO</span>
+                    </div>
+                    <div class="beer-meta">
+                        <span class="tag tag-color-rubia">Rubia</span>
+                        <span class="tag tag-abv">4% alc</span>
+                        <span class="tag tag-ibu">12 IBU</span>
+                        <span class="tag tag-bitterness bajo">Amargor bajo</span>
+                    </div>
+                    <div class="bitterness-bar"><div class="bitterness-fill bajo"></div></div>
+                    <div class="beer-prices">
+                        <div class="price">
+                            <span class="price-label">Pinta</span>
+                            <span class="price-value promo">$2.800</span>
+                        </div>
+                        <div class="price-separator"></div>
+                        <div class="price">
+                            <span class="price-label">½ Pinta</span>
+                            <span class="price-value promo">$1.500</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- American Amber Ale -->
+                <div class="beer-card">
+                    <div class="beer-card-top">
+                        <div>
+                            <div class="beer-name">American Amber Ale</div>
+                            <div class="beer-brewery">Ragnarok Brewing</div>
+                        </div>
+                    </div>
+                    <div class="beer-meta">
+                        <span class="tag tag-color-roja">Roja</span>
+                        <span class="tag tag-abv">6% alc</span>
+                        <span class="tag tag-ibu">20 IBU</span>
+                        <span class="tag tag-bitterness bajo">Amargor bajo</span>
+                    </div>
+                    <div class="bitterness-bar"><div class="bitterness-fill bajo"></div></div>
+                    <div class="beer-prices">
+                        <div class="price">
+                            <span class="price-label">Pinta</span>
+                            <span class="price-value">$5.200</span>
+                        </div>
+                        <div class="price-separator"></div>
+                        <div class="price">
+                            <span class="price-label">½ Pinta</span>
+                            <span class="price-value">$3.000</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Doppelbock -->
+                <div class="beer-card">
+                    <div class="beer-card-top">
+                        <div>
+                            <div class="beer-name">Doppelbock</div>
+                            <div class="beer-brewery">Ragnarok Brewing</div>
+                        </div>
+                    </div>
+                    <div class="beer-meta">
+                        <span class="tag tag-color-roja">Roja</span>
+                        <span class="tag tag-abv">8% alc</span>
+                        <span class="tag tag-ibu">35 IBU</span>
+                        <span class="tag tag-bitterness alto">Amargor alto</span>
+                    </div>
+                    <div class="bitterness-bar"><div class="bitterness-fill alto"></div></div>
+                    <div class="beer-prices">
+                        <div class="price">
+                            <span class="price-label">Pinta</span>
+                            <span class="price-value">$6.100</span>
+                        </div>
+                        <div class="price-separator"></div>
+                        <div class="price">
+                            <span class="price-label">½ Pinta</span>
+                            <span class="price-value">$4.100</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- IPA Cannabica -->
+                <div class="beer-card">
+                    <div class="beer-card-top">
+                        <div>
+                            <div class="beer-name">IPA Cannabica</div>
+                            <div class="beer-brewery">Cerveza Agosto</div>
+                        </div>
+                    </div>
+                    <div class="beer-meta">
+                        <span class="tag tag-color-rubia">Rubia</span>
+                        <span class="tag tag-abv">6% alc</span>
+                        <span class="tag tag-ibu">50 IBU</span>
+                        <span class="tag tag-bitterness alto">Amargor alto</span>
+                    </div>
+                    <div class="bitterness-bar"><div class="bitterness-fill alto"></div></div>
+                    <div class="beer-prices">
+                        <div class="price">
+                            <span class="price-label">Pinta</span>
+                            <span class="price-value">$6.100</span>
+                        </div>
+                        <div class="price-separator"></div>
+                        <div class="price">
+                            <span class="price-label">½ Pinta</span>
+                            <span class="price-value">$4.100</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- IPA Argenta -->
+                <div class="beer-card">
+                    <div class="beer-card-top">
+                        <div>
+                            <div class="beer-name">IPA Argenta</div>
+                            <div class="beer-brewery">Cerveza 372</div>
+                        </div>
+                    </div>
+                    <div class="beer-meta">
+                        <span class="tag tag-color-rubia">Rubia</span>
+                        <span class="tag tag-abv">5.5% alc</span>
+                        <span class="tag tag-ibu">46 IBU</span>
+                        <span class="tag tag-bitterness alto">Amargor alto</span>
+                    </div>
+                    <div class="bitterness-bar"><div class="bitterness-fill alto"></div></div>
+                    <div class="beer-prices">
+                        <div class="price">
+                            <span class="price-label">Pinta</span>
+                            <span class="price-value">$5.700</span>
+                        </div>
+                        <div class="price-separator"></div>
+                        <div class="price">
+                            <span class="price-label">½ Pinta</span>
+                            <span class="price-value">$3.700</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scottish -->
+                <div class="beer-card">
+                    <div class="beer-card-top">
+                        <div>
+                            <div class="beer-name">Scottish</div>
+                            <div class="beer-brewery">Cerveza 372</div>
+                        </div>
+                    </div>
+                    <div class="beer-meta">
+                        <span class="tag tag-color-roja">Roja</span>
+                        <span class="tag tag-abv">4.1% alc</span>
+                        <span class="tag tag-ibu">16 IBU</span>
+                        <span class="tag tag-bitterness bajo">Amargor bajo</span>
+                    </div>
+                    <div class="bitterness-bar"><div class="bitterness-fill bajo"></div></div>
+                    <div class="beer-prices">
+                        <div class="price">
+                            <span class="price-label">Pinta</span>
+                            <span class="price-value">$5.200</span>
+                        </div>
+                        <div class="price-separator"></div>
+                        <div class="price">
+                            <span class="price-label">½ Pinta</span>
+                            <span class="price-value">$3.000</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Session IPA -->
+                <div class="beer-card">
+                    <div class="beer-card-top">
+                        <div>
+                            <div class="beer-name">Session IPA</div>
+                            <div class="beer-brewery">Cerveza 372</div>
+                        </div>
+                    </div>
+                    <div class="beer-meta">
+                        <span class="tag tag-color-rubia">Rubia</span>
+                        <span class="tag tag-abv">5.1% alc</span>
+                        <span class="tag tag-ibu">30 IBU</span>
+                        <span class="tag tag-bitterness medio">Amargor medio</span>
+                    </div>
+                    <div class="bitterness-bar"><div class="bitterness-fill medio"></div></div>
+                    <div class="beer-prices">
+                        <div class="price">
+                            <span class="price-label">Pinta</span>
+                            <span class="price-value">$5.700</span>
+                        </div>
+                        <div class="price-separator"></div>
+                        <div class="price">
+                            <span class="price-label">½ Pinta</span>
+                            <span class="price-value">$3.700</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ════════════ TRAGOS ════════════ -->
+        <section id="tragos" class="section fade-in">
+            <div class="section-header">
+                <h2>Tragos Tirados</h2>
+                <p class="section-sub">Directo de la canilla</p>
+                <div class="section-divider"></div>
+            </div>
+
+            <div class="drinks-list">
+                <div class="drink-item">
+                    <div>
+                        <div class="drink-name">Fernet Tirado</div>
+                        <div class="drink-desc">Fernet Branca — Clásico argentino</div>
+                    </div>
+                    <div class="drink-price">$5.000</div>
+                </div>
+                <div class="drink-item">
+                    <div>
+                        <div class="drink-name">Holdmoser con Speed</div>
+                        <div class="drink-desc">Cerveza + energy drink</div>
+                    </div>
+                    <div class="drink-price">$4.000</div>
+                </div>
+                <div class="drink-item">
+                    <div>
+                        <div class="drink-name">Jäger con Speed</div>
+                        <div class="drink-desc">Jägermeister + energy drink</div>
+                    </div>
+                    <div class="drink-price">$6.000</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ════════════ RECARGAS ════════════ -->
+        <section id="recargas" class="section fade-in">
+            <div class="section-header">
+                <h2>Recargas</h2>
+                <p class="section-sub">Seguí birlando sin levantarte</p>
+                <div class="section-divider"></div>
+            </div>
+
+            <div class="refill-grid">
+                <div class="refill-card">
+                    <div class="refill-icon">🫙</div>
+                    <div class="refill-type">Botellón PET</div>
+                    <div class="refill-desc">Descartable · 1 o 2 litros</div>
+                    <div class="refill-price">$800</div>
+                </div>
+                <div class="refill-card">
+                    <div class="refill-icon">🍶</div>
+                    <div class="refill-type">Botellón de Vidrio</div>
+                    <div class="refill-desc">Reutilizable · 1 o 2 litros</div>
+                    <div class="refill-price">$8.800</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ════════════ VINOS (PLACEHOLDER) ════════════ -->
+        <section id="vinos" class="section fade-in">
+            <div class="section-header">
+                <h2>Vinos</h2>
+                <div class="section-divider"></div>
+            </div>
+            <div class="placeholder">
+                <div class="placeholder-icon">🍷</div>
+                <h3>Próximamente</h3>
+                <p>Estamos armando la selección de vinos para vos</p>
+            </div>
+        </section>
+
+        <!-- ════════════ CÓCTELES (PLACEHOLDER) ════════════ -->
+        <section id="cocteles" class="section fade-in">
+            <div class="section-header">
+                <h2>Cócteles Clásicos</h2>
+                <div class="section-divider"></div>
+            </div>
+            <div class="placeholder">
+                <div class="placeholder-icon">🍸</div>
+                <h3>Próximamente</h3>
+                <p>Trabajando en nuestra carta de cócteles</p>
+            </div>
+        </section>
+
+        <!-- ════════════ COMIDA (PLACEHOLDER) ════════════ -->
+        <section id="comida" class="section fade-in">
+            <div class="section-header">
+                <h2>Comida</h2>
+                <div class="section-divider"></div>
+            </div>
+            <div class="placeholder">
+                <div class="placeholder-icon">🍽️</div>
+                <h3>Ver carta completa</h3>
+                <p>Consultá nuestra carta de comida en el siguiente link</p>
+                <br>
+                <a href="https://drive.google.com/open?id=1sEDO0qWtGf-A1CLAeqXd_yaop-5ne3o7" target="_blank" class="footer-btn btn-food" style="margin: 0 auto; display: inline-flex;">
+                    Ver Carta de Comida
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ════════════ FOOTER ════════════ -->
+    <footer class="footer">
+        <div class="divider" style="margin-bottom: 28px;">
+            <span class="divider-line"></span>
+            <span class="divider-diamond"></span>
+            <span class="divider-line"></span>
+        </div>
+
+        <p class="footer-message">
+            Gracias por las risas, los brindis y por hacer de cada noche una historia.<br>
+            Nos encanta que la vivan acá.
+        </p>
+
+        <div class="footer-links">
+            <a href="https://wa.me/3496560756?text=Hola,%20me%20agregan%20a%20la%20lista%20de%20difusion%20de%20shows?" target="_blank" class="footer-btn btn-whatsapp">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                Lista de shows
+            </a>
+            <a href="https://drive.google.com/open?id=1sEDO0qWtGf-A1CLAeqXd_yaop-5ne3o7" target="_blank" class="footer-btn btn-food">
+                🍽️ Carta de Comida
+            </a>
+        </div>
+
+        <p class="footer-alias">Alias para transferir: <strong>aspera.mp</strong></p>
+
+        <p class="footer-copy">&copy; Aspera Bar — Todos los derechos reservados</p>
+    </footer>
+
+    <!-- ════════════ SCRIPTS ════════════ -->
+    <script>
+        // Animaciones de entrada al hacer scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Navegación activa
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                if (window.scrollY >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
